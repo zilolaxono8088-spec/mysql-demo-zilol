@@ -1,51 +1,466 @@
-<!DOCTYPE html>
+[27/11/2026 09:43] Зилола Отакузиева А.Т.Т.гурухи: <!doctype html>
 <html lang="uz">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>MySQL demo</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MySQL demo — Ismingizni qoldiring</title>
   <style>
-    body { font-family: system-ui, sans-serif; max-width: 480px; margin: 40px auto; padding: 0 16px; }
-    input { padding: 8px; width: 60%; }
-    button { padding: 8px 14px; }
-    li { margin: 6px 0; }
-    small { color: #666; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+      overflow-x: hidden;
+      background: #2b1708;
+      color: #1f140b;
+    }
+
+    /* Кузги дарахтлар ва тилларанг ўрмон фони */
+    .autumn-scene {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 22% 18%, rgba(255, 224, 130, 0.45), transparent 36%),
+        radial-gradient(circle at 78% 22%, rgba(255, 179, 71, 0.35), transparent 42%),
+        linear-gradient(180deg, #5d3616 0%, #9b5a1b 28%, #d4882a 56%, #7d4314 82%, #3d1e08 100%);
+    }
+
+    /* Дарахт таналари ва шохлари силуэти */
+    .trees-layer {
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 140px 260px at 8% 35%, rgba(245, 166, 35, 0.55), transparent 70%),
+        radial-gradient(ellipse 180px 300px at 22% 28%, rgba(232, 118, 28, 0.48), transparent 72%),
+        radial-gradient(ellipse 200px 320px at 50% 20%, rgba(255, 198, 64, 0.45), transparent 75%),
+        radial-gradient(ellipse 190px 290px at 77% 28%, rgba(224, 98, 28, 0.5), transparent 72%),
+        radial-gradient(ellipse 150px 260px at 92% 36%, rgba(240, 150, 32, 0.52), transparent 70%);
+      filter: blur(2px);
+      animation: canopySway 10s ease-in-out infinite alternate;
+    }
+
+    .trunks-layer {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(90deg, transparent 7%, rgba(36, 17, 6, 0.72) 7.6%, rgba(56, 28, 10, 0.65) 8.4%, transparent 9%),
+        linear-gradient(90deg, transparent 21%, rgba(32, 15, 5, 0.62) 21.5%, transparent 22.1%),
+        linear-gradient(90deg, transparent 36%, rgba(40, 19, 7, 0.45) 36.4%, transparent 36.9%),
+        linear-gradient(90deg, transparent 64%, rgba(38, 18, 6, 0.48) 64.4%, transparent 64.9%),
+        linear-gradient(90deg, transparent 78%, rgba(32, 15, 5, 0.65) 78.6%, transparent 79.3%),
+        linear-gradient(90deg, transparent 91%, rgba(36, 17, 6, 0.75) 91.7%, transparent 92.6%);
+      opacity: 0.85;
+    }
+
+    /* Пастки хазонрезги гилам */
+    .ground-leaves {
+      position: absolute;
+      left: -5%;
+      right: -5%;
+      bottom: -18px;
+      height: 115px;
+      background:
+        radial-gradient(circle at 8% 45%, #e67e22 0 28px, transparent 29px),
+        radial-gradient(circle at 14% 65%, #f1c40f 0 24px, transparent 25px),
+        radial-gradient(circle at 21% 40%, #c0392b 0 26px, transparent 27px),
+        radial-gradient(circle at 28% 60%, #d35400 0 30px, transparent 31px),
+        radial-gradient(circle at 36% 48%, #f39c12 0 25px, transparent 26px),
+        radial-gradient(circle at 45% 62%, #e67e22 0 29px, transparent 30px),
+        radial-gradient(circle at 54% 44%, #f1c40f 0 27px, transparent 28px),
+        radial-gradient(circle at 63% 64%, #c0392b 0 25px, transparent 26px),
+        radial-gradient(circle at 72% 46%, #d35400 0 31px, transparent 32px),
+        radial-gradient(circle at 81% 60%, #f39c12 0 26px, transparent 27px),
+        radial-gradient(circle at 90% 48%, #e67e22 0 28px, transparent 29px),
+        linear-gradient(180deg, rgba(160, 72, 15, 0.4) 0%, #5c2608 75%, #2b1003 100%);
+      filter: drop-shadow(0 -6px 12px rgba(0, 0, 0, 0.45));
+    }
+
+    /* Тўкилиб тушаётган жонли барглар қатлами */
+    .falling-leaves {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .falling-leaf {
+      position: absolute;
+      top: -60px;
+      width: 22px;
+      height: 14px;
+      border-radius: 85% 15% 85% 15%;
+      opacity: 0.9;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+      animation-name: leafFall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    .falling-leaf::
+[27/11/2026 09:43] Зилола Отакузиева А.Т.Т.гурухи: after {
+      content: "";
+      position: absolute;
+      left: 2px;
+      right: 2px;
+      top: 50%;
+      height: 1px;
+      background: rgba(90, 35, 5, 0.45);
+      transform: translateY(-50%) rotate(-8deg);
+    }
+
+    @keyframes leafFall {
+      0% {
+        transform: translate3d(0, -50px, 0) rotate(0deg) rotateY(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.95;
+      }
+      50% {
+        transform: translate3d(var(--drift, 45px), 50vh, 0) rotate(185deg) rotateY(65deg);
+      }
+      90% {
+        opacity: 0.92;
+      }
+      100% {
+        transform: translate3d(calc(var(--drift, 45px) * -0.4), 108vh, 0) rotate(360deg) rotateY(0deg);
+        opacity: 0;
+      }
+    }
+
+    @keyframes canopySway {
+      0% { transform: scale(1) translateX(0px); }
+      100% { transform: scale(1.03) translateX(10px); }
+    }
+
+    /* Марказий шаффоф ойнали («glass») карта */
+    .page-wrapper {
+      position: relative;
+      z-index: 2;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+    }
+
+    .glass-card {
+      width: 100%;
+      max-width: 540px;
+      background: rgba(255, 248, 235, 0.56);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.45);
+      border-radius: 18px;
+      padding: 36px 32px 40px;
+      box-shadow: 0 20px 50px rgba(25, 11, 2, 0.45);
+    }
+
+    h1 {
+      margin: 0 0 24px;
+      text-align: center;
+      font-size: 32px;
+      font-weight: 800;
+      color: #1a110a;
+      letter-spacing: -0.3px;
+    }
+
+    .form-row {
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      gap: 10px;
+      max-width: 440px;
+      margin: 0 auto 24px;
+    }
+
+    input#name {
+      flex: 1;
+      min-width: 0;
+      padding: 10px 14px;
+      font-size: 15px;
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(120, 75, 35, 0.35);
+      border-radius: 6px;
+      color: #1f140b;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    input#name:focus {
+      border-color: #d97706;
+      box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.22);
+    }
+
+    button.save-btn {
+      padding: 10px 18px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #1f140b;
+      background: linear-gradient(180deg, #ffbe42 0%, #f59e0b 100%);
+      border: 1px solid rgba(146, 64, 14, 0.45);
+      border-radius: 6px;
+      cursor: pointer;
+      box-shadow: 0 3px 10px rgba(146, 64, 14, 0.25);
+      transition: transform 0.15s, filter 0.15s;
+    }
+
+    button.save-btn:hover {
+      filter: brightness(1.05);
+      transform: translateY(-1px);
+    }
+
+    button.save-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Ҳар бир исм сарғайган барг устида */
+    ul#list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .name-leaf-item {
+      position: relative;
+      width: 245px;
+      min-height: 112px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 18px 28px;
+      text-align: center;
+      border-radius: 90% 18% 88% 22% / 65% 75% 30% 60%;
+      background:
+        radial-gradient(circle at 35% 35%, #ffe066 0%, #f7b519 48%, #d97706 88%, #b45309 100%);
+      box-shadow:
+        0 10px 22px rgba(45, 18, 2, 0.32),
+        inset 0 2px 6px rgba(255, 255, 255, 0.55),
+        inset 0 -6px 12px rgba(146, 64, 14, 0.35);
+      transform: rotate(-3deg);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .name-leaf-item:nth-child(even) {
+      transform: rotate(3deg);
+      background:
+        radial-gradient(circle at 60% 35%, #ffd447 0%, #f59e0b 52%, #ea580c 92%, #9a3412 100%);
+    }
+
+    .name-leaf-item:hover {
+      transform: scale(1.04) rotate(0deg);
+      box-shadow: 0 14px 26px rgba(45, 18, 2, 0.4);
+    }
+
+    /* Барг банди ва марказий томирчаси */
+    .name-leaf-item::before {
+      co
+[27/11/2026 09:43] Зилола Отакузиева А.Т.Т.гурухи: ntent: "";
+      position: absolute;
+      left: -24px;
+      top: 50%;
+      width: 26px;
+      height: 3px;
+      background: #6b3410;
+      border-radius: 3px;
+      transform: translateY(-50%) rotate(10deg);
+    }
+
+    .name-leaf-item::after {
+      content: "";
+      position: absolute;
+      left: 14px;
+      right: 18px;
+      top: 50%;
+      height: 1.5px;
+      background: rgba(120, 53, 15, 0.28);
+      transform: translateY(-50%) rotate(-3deg);
+      pointer-events: none;
+    }
+
+    .leaf-name-text {
+      position: relative;
+      z-index: 1;
+      font-size: 20px;
+      font-weight: 700;
+      color: #181009;
+      text-shadow: 0 1px 0 rgba(255, 245, 210, 0.65);
+      word-break: break-word;
+    }
+
+    .leaf-date-text {
+      position: relative;
+      z-index: 1;
+      margin-top: 4px;
+      font-size: 12px;
+      color: rgba(45, 20, 5, 0.78);
+    }
+
+    @media (max-width: 520px) {
+      .glass-card {
+        padding: 26px 18px 30px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+
+      .form-row {
+        flex-direction: column;
+      }
+
+      button.save-btn {
+        width: 100%;
+      }
+
+      .name-leaf-item {
+        width: 215px;
+        min-height: 100px;
+      }
+
+      .leaf-name-text {
+        font-size: 18px;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>Ismingizni qoldiring</h1>
-  <input id="name" placeholder="Ism" maxlength="100">
-  <button onclick="add()">Saqlash</button>
-  <ul id="list"></ul>
+  <div class="autumn-scene" aria-hidden="true">
+    <div class="trees-layer"></div>
+    <div class="trunks-layer"></div>
+    <div class="ground-leaves"></div>
+  </div>
 
-<script>
-const API = "/.netlify/functions/api";
+  <div class="falling-leaves" id="fallingLeaves" aria-hidden="true"></div>
 
-async function load() {
-  const rows = await (await fetch(API)).json();
-  const ul = document.getElementById("list");
-  ul.innerHTML = "";
-  rows.forEach(r => {
-    const li = document.createElement("li");
-    li.textContent = r.name + " ";
-    const s = document.createElement("small");
-   const d =r.created_at ? new Date(r.created_at):null;
-    s.textContent =(d && !isNaN(d)) ? " (" + d.toLocaleString() + ")" : "";
-    li.appendChild(s);
-    ul.appendChild(li);
-  });
-}
+  <main class="page-wrapper">
+    <section class="glass-card">
+      <h1>Ismingizni qoldiring</h1>
 
-async function add() {
-  const input = document.getElementById("name");
-  const name = input.value.trim();
-  if (!name) return;
-  await fetch(API, { method: "POST", body: JSON.stringify({ name }) });
-  input.value = "";
-  load();
-}
+      <div class="form-row">
+        <input id="name" placeholder="Ism" maxlength="100" />
+        <button class="save-btn" onclick="add()">Saqlash</button>
+      </div>
 
-load();
-</script>
+      <ul id="list"></ul>
+    </section>
+  </main>
+
+  <script>
+    const API = "/.netlify/functions/api";
+    const leafColors = [
+      "#ffb703",
+      "#fb8500",
+      "#e85d04",
+      "#d00000",
+      "#f4a261",
+      "#e9c46a"
+    ];
+
+    function spawnFallingLeaves() {
+      const container = document.getElementById("fallingLeaves");
+      if (!container) return;
+      container.innerHTML = "";
+
+      const count = 26;
+      for (let i = 0; i < count; i++) {
+        const leaf = document.createElement("span");
+        leaf.className = "falling-leaf";
+
+        const left = (i * 3.8 + (i % 3) * 1.4) % 98;
+        const duration = 7 + (i % 6) * 1.8;
+        const delay = -((i * 1.3) % duration);
+        const drift = ((i % 2 === 0 ? 1 : -1) * (25 + (i % 5) * 14)) + "px";
+        const scale = 0.75 + (i % 4) * 0.18;
+        const color = leafColors[i % leafColors.length];
+
+        leaf.style.left = left + "%";
+        leaf.style.background = color;
+        leaf.style.animationDuration = duration + "s";
+        leaf.style.animationDelay = delay + "s";
+        leaf.style.setProperty("--drift", drift);
+        leaf.style.transform = scale(${scale});
+
+        container.appendChild(leaf);
+      }
+    }
+
+    function formatSafeDate(rawDate) {
+      if (!rawDate) return "";
+      const parsed = new Date(rawDate);
+      if (Number.isNaN(parsed.getTime())) return "";
+      return parsed.toLocaleString();
+    }
+
+    async function load() {
+      const ul = document.getElementById("list");
+      try {
+        const res = await fetch(API);
+        if (!res.ok) throw new Error("API response not ok");
+        const rows = await res.json();
+        ul.innerHTML = "";
+
+        rows.forEach((r) => {
+          const li = document.createElement("li");
+          li.className = "name-leaf-item";
+
+          const nameSpan = document.createElement("span");
+          nameSpan.className = "leaf-name-text";
+          nameSpan.textContent = r.name || "";
+          li.appendChild(nameSpan);
+
+          const formatted = formatSafeDate(r.created_at);
+          if (formatted) {
+            const dateSmall = document.createElement("small");
+            dateSmall.className = "leaf-date-text";
+            dateSmall.textContent = formatted;
+            li.appendChild(dateS
+[27/11/2026 09:43] Зилола Отакузиева А.Т.Т.гурухи: mall);
+          }
+
+          ul.appendChild(li);
+        });
+      } catch (err) {
+        console.error("Ma'lumotlarni yuklashda xatolik:", err);
+      }
+    }
+
+    async function add() {
+      const input = document.getElementById("name");
+      const name = input.value.trim();
+      if (!name) return;
+
+      try {
+        await fetch(API, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name })
+        });
+        input.value = "";
+        await load();
+      } catch (err) {
+        console.error("Saqlashda xatolik:", err);
+      }
+    }
+
+    document.getElementById("name").addEventListener("keydown", (e) => {
+      if (e.key === "Enter") add();
+    });
+
+    spawnFallingLeaves();
+    load();
+  </script>
 </body>
 </html>
