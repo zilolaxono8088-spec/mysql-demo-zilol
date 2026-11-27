@@ -103,4 +103,18 @@ exports.handler = async (event) => {
     if (conn) await conn.end().catch(() => {});
   }
 };
+[27/11/2026 07:53] Зилола Отакузиева А.Т.Т.гурухи: exports.handler = async (event) => {
+  return {
+    statusCode: 200,
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      ok: true,
+      hasHost: Boolean(process.env.DB_HOST),
+      hasPort: Boolean(process.env.DB_PORT),
+      hasUser: Boolean(process.env.DB_USER),
+      hasPass: Boolean(process.env.DB_PASSWORD),
+      hasDb: Boolean(process.env.DB_NAME),
+    }),
+  };
+};
    
