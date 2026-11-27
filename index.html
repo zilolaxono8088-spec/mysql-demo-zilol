@@ -1,4 +1,4 @@
-<!doctype html>
+[27/11/2026 09:43] Зилола Отакузиева А.Т.Т.гурухи: <!doctype html>
 <html lang="uz">
 <head>
   <meta charset="utf-8" />
@@ -104,7 +104,7 @@
     }
 
     .falling-leaf::
- after {
+[27/11/2026 09:43] Зилола Отакузиева А.Т.Т.гурухи: after {
       content: "";
       position: absolute;
       left: 2px;
@@ -267,7 +267,7 @@
     /* Барг банди ва марказий томирчаси */
     .name-leaf-item::before {
       co
- ntent: "";
+[27/11/2026 09:43] Зилола Отакузиева А.Т.Т.гурухи: ntent: "";
       position: absolute;
       left: -24px;
       top: 50%;
@@ -427,7 +427,7 @@
             dateSmall.className = "leaf-date-text";
             dateSmall.textContent = formatted;
             li.appendChild(dateS
- mall);
+[27/11/2026 09:43] Зилола Отакузиева А.Т.Т.гурухи: mall);
           }
 
           ul.appendChild(li);
@@ -460,6 +460,279 @@
     });
 
     spawnFallingLeaves();
+    load();
+  </script>
+</body>
+</html>
+[27/11/2026 10:04] Зилола Отакузиева А.Т.Т.гурухи: <!doctype html>
+<html lang="uz">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MySQL demo — Ismingizni qoldiring</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+      overflow-x: hidden;
+      background: linear-gradient(180deg, #2b1d0e 0%, #5c3715 45%, #8c4f19 100%);
+      color: #231609;
+    }
+
+    /* Тўкилаётган кузги барглар фони */
+    .leaves-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .falling-leaf {
+      position: absolute;
+      top: -40px;
+      width: 22px;
+      height: 14px;
+      border-radius: 0 100% 0 100%;
+      opacity: 0.75;
+      animation: fall linear infinite;
+    }
+
+    .falling-leaf:nth-child(1) { left: 8%; background: #e06d1b; animation-duration: 9s; animation-delay: 0s; }
+    .falling-leaf:nth-child(2) { left: 22%; background: #f2a922; animation-duration: 11s; animation-delay: -2s; }
+    .falling-leaf:nth-child(3) { left: 37%; background: #c9461a; animation-duration: 8.5s; animation-delay: -4s; }
+    .falling-leaf:nth-child(4) { left: 53%; background: #f5be3b; animation-duration: 12s; animation-delay: -1s; }
+    .falling-leaf:nth-child(5) { left: 68%; background: #d95d1e; animation-duration: 10s; animation-delay: -5s; }
+    .falling-leaf:nth-child(6) { left: 83%; background: #ebb02d; animation-duration: 9.5s; animation-delay: -3s; }
+    .falling-leaf:nth-child(7) { left: 92%; background: #b83b14; animation-duration: 11.5s; animation-delay: -6s; }
+
+    @keyframes fall {
+      0% {
+        transform: translate3d(0, -40px, 0) rotate(0deg);
+      }
+      50% {
+        transform: translate3d(28px, 50vh, 0) rotate(140deg);
+      }
+      100% {
+        transform: translate3d(-20px, 105vh, 0) rotate(290deg);
+      }
+    }
+
+    .container {
+      position: relative;
+      z-index: 1;
+      max-width: 680px;
+      margin: 48px auto;
+      padding: 0 16px 48px;
+    }
+
+    .card {
+      background: rgba(255, 244, 214, 0.88);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 224, 150, 0.65);
+      border-radius: 20px;
+      padding: 28px 24px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+      text-align: center;
+    }
+
+    h1 {
+      margin: 0 0 20px;
+      font-size: 28px;
+      color: #3b2109;
+    }
+
+    .form-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    input {
+      flex: 1;
+      min-width: 220px;
+      max-width: 420px;
+      padding: 11px 14px;
+      font-size: 16px;
+      border: 2px solid #d49a3a;
+      border-radius: 10px;
+      background: #fffdf7;
+      color: #231609;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #c85a17;
+    }
+
+    button {
+      padding: 11px 22px;
+      font-size: 16px;
+      font-weight: 600;
+      border: none;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #f39c12, #d35400);
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(211, 84, 0, 0.35);
+      transition: transform 0.15s ease, filter 0.15s ease;
+    }
+
+    button:hover {
+      filter: brightness(1.06);
+      transform: translateY(-1px);
+    }
+
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    #status {
+      margin-top: 12px;
+      min-height: 20px;
+      font-size: 14px;
+      color: #7a2e08;
+    }
+
+    .leaves-list {
+      margin-top: 26px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+    }
+
+    /* Барг шаклидаги элементлар */
+    .name-leaf {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 22px;
+      background: linear-gradient(135deg, #f6b93b, #e58e26 55%, #cf5b19);
+      color: #251305;
+      font-weight: 600;
+      font-size: 16px;
+      border-radius: 4px 36px 8px 36px;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
+[27/11/2026 10:04] Зилола Отакузиева А.Т.Т.гурухи: border: 1px solid rgba(255, 236, 179, 0.7);
+      animation: popIn 0.25s ease;
+    }
+
+    @keyframes popIn {
+      from {
+        opacity: 0;
+        transform: scale(0.9) translateY(6px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="leaves-bg" aria-hidden="true">
+    <span class="falling-leaf"></span>
+    <span class="falling-leaf"></span>
+    <span class="falling-leaf"></span>
+    <span class="falling-leaf"></span>
+    <span class="falling-leaf"></span>
+    <span class="falling-leaf"></span>
+    <span class="falling-leaf"></span>
+  </div>
+
+  <main class="container">
+    <section class="card">
+      <h1>Ismingizni qoldiring</h1>
+      <div class="form-row">
+        <input id="name" type="text" placeholder="Ism" maxlength="100" />
+        <button id="saveBtn" type="button" onclick="add()">Saqlash</button>
+      </div>
+      <div id="status"></div>
+      <div id="list" class="leaves-list"></div>
+    </section>
+  </main>
+
+  <script>
+    const API = "/.netlify/functions/api";
+    const inputEl = document.getElementById("name");
+    const listEl = document.getElementById("list");
+    const statusEl = document.getElementById("status");
+    const saveBtn = document.getElementById("saveBtn");
+
+    function renderItems(items) {
+      listEl.innerHTML = "";
+      if (!Array.isArray(items) || items.length === 0) {
+        return;
+      }
+      for (const item of items) {
+        const leaf = document.createElement("div");
+        leaf.className = "name-leaf";
+        leaf.textContent = "🍂 " + (item.name ?? "");
+        listEl.appendChild(leaf);
+      }
+    }
+
+    async function load() {
+      try {
+        const res = await fetch(API, { cache: "no-store" });
+        const data = await res.json();
+        if (!res.ok) {
+          statusEl.textContent = data.error || "Yuklashda xatolik";
+          return;
+        }
+        renderItems(data);
+      } catch (err) {
+        statusEl.textContent = "Server bilan bog'lanib bo'lmadi: " + err.message;
+      }
+    }
+
+    async function add() {
+      const name = inputEl.value.trim();
+      if (!name) {
+        statusEl.textContent = "Iltimos, ism kiriting.";
+        inputEl.focus();
+        return;
+      }
+
+      saveBtn.disabled = true;
+      statusEl.textContent = "Saqlanmoqda...";
+
+      try {
+        const res = await fetch(API, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name })
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          statusEl.textContent = data.error || "Saqlashda xatolik";
+          return;
+        }
+        inputEl.value = "";
+        statusEl.textContent = "Saqlandi!";
+        await load();
+      } catch (err) {
+        statusEl.textContent = "Xatolik: " + err.message;
+      } finally {
+        saveBtn.disabled = false;
+      }
+    }
+
+    inputEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") {
+        add();
+      }
+    });
+
     load();
   </script>
 </body>
