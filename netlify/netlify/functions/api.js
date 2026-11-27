@@ -1,4 +1,4 @@
- const mysql = require("mysql2/promise");
+[27/11/2026 07:17] Зилола Отакузиева А.Т.Т.гурухи: const mysql = require("mysql2/promise");
 
 const headers = {
   "Content-Type": "application/json",
@@ -117,4 +117,17 @@ exports.handler = async (event) => {
     }),
   };
 };
-   
+[27/11/2026 08:07] Зилола Отакузиева А.Т.Т.гурухи: {
+  "name": "mysql-demo-zilol",
+  "version": "1.0.0",
+  "dependencies": {
+    "mysql2": "^3.11.0"
+  }
+}
+[27/11/2026 08:24] Зилола Отакузиева А.Т.Т.гурухи: {
+  "name": "mysql-demo-zilol",
+  "version": "1.0.0",
+  "dependencies": {
+    "mysql2": "^3.11.0"
+  }
+}
