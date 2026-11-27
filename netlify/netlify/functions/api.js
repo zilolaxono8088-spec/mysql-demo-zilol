@@ -1,4 +1,4 @@
-[27/11/2026 07:17] Зилола Отакузиева А.Т.Т.гурухи: const mysql = require("mysql2/promise");
+ const mysql = require("mysql2/promise");
 
 const headers = {
   "Content-Type": "application/json",
