@@ -29,7 +29,8 @@ async function load() {
     const li = document.createElement("li");
     li.textContent = r.name + " ";
     const s = document.createElement("small");
-    s.textContent = "(" + new Date(r.created_at).toLocaleString() + ")";
+   const d =r.created_at ? new Date(r.created_at):null;
+    s.textContent =(d && !isNaN(d)) ? " (" + d.toLocaleString() + ")" : "";
     li.appendChild(s);
     ul.appendChild(li);
   });
